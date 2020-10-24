@@ -19,21 +19,30 @@ $(document).ready(function () {
             console.log(response);
 
 
-            $("$seven-days").empty();
+            $("#seven-days").empty();
 
             var weathResults = response.list;
+            console.log(weathResults);
 
-            for (var i = 0; i < 7; i++){
+            // for (var i = 0; i < 7; i++) {
+                var dayoneDiv = $("<div>")
+                
+                var pTemp = $("<p>").text("Temp: " + weathResults[0].main.temp);
+                var pWeath = $("<p>").text("Weather: " + weathResults[0].weather[0].icon)
+                
+                dayoneDiv.append(pTemp, pWeath)
+                $("#seven-days").append(dayoneDiv)
 
-var tempDiv = $("<div>");
-
-var tempP = $("<p>").text("Temperature: " + results[i].main.weather)
-tempDiv.append(tempP);
-    
-
+            // var dayoneDiv = $("<div>")
+            // var pTemp = $("<p>").text("Temp: " + results[0].main.temp);
+            // var pWeath = $("<p>").text("Weather: " + results[i].weather[0].icon)
+            // dayoneDiv.append(date, pTemp, pWeath, pHumid)
 
 
-            }
+
+
+
+            // }
         })
 
     });
