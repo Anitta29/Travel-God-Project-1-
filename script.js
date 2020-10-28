@@ -2,13 +2,11 @@ $(document).ready(function () {
 
     var APIkey = "11aae01829609ac12c0335ac0cc4505c";
 
-    $("button").on("click", function () {
+    $(".search").on("click", function () {
 
         var userInput = $("#search-box").val();
 
-        var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + userInput + "&appid=" + APIkey
-        // "https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
-
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + userInput + "&appid=" + APIkey + "&units=imperial"
 
 
         $.ajax({
@@ -28,11 +26,12 @@ $(document).ready(function () {
             console.log(lat, lon);
 
             var curDiv = $("<div>");
-            var pTemp = $("<p>").text("Temperature: " + temp);
-            var pWeath = $("<p>").text("Weather: " + weather);
-            curDiv.append(pTemp, pWeath)
+            var pTemp = $("<p>").text("Temperature: " + temp + "F");
+            // var pWeath = $("<p>").text("Weather: " + weather);
+            var weathIcon = $("<img>").attr("src", "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png");
+            curDiv.append(pTemp, weathIcon)
 
-            $("#seven-days").append(curDiv)
+            $("#current").append(curDiv)
 
             sevenDay(lat, lon)
 
@@ -53,20 +52,32 @@ $(document).ready(function () {
         }).then(function (response) {
             console.log(response);
             console.log(response.daily)
-            // var sevResults = response.list;
-            // console.log(sevResults);
 
 
             var daily = response.daily
-            
+
+
+            for (var i = 0; i < daily.length; i++) {
+                var unixTime = daily[i].dt
+                var date = moment.unix(unixTime).format("MM, DD, YYYY")
+                console.log(date);
+
+            }
+            // moment(daily[0].dt_txt).format('MMMM Do YYYY')
+                $("#seven-days").empty();
 
                 for (var i = 0; i < daily.length; i++) {
-                    var unixTime = daily[i].dt
-                    var date = moment.unix(unixTime).format("MM, DD, YYYY")
-                    console.log(date);
 
-
+                    var dayoneDiv = $("<div>")
                     
+
+                    // var date = $("<p>").text(moment(daily[0].dt_txt).format('MMMM Do YYYY'));
+                    var pTemp = $("<p>").text(response.daily[i].temp.day + "F");
+                    var pWeath = $("<img>").attr("src", "http://openweathermap.org/img/w/" + daily[i].weather[0].icon + ".png")
+                    dayoneDiv.append(pTemp, pWeath)
+                    $("#seven-days").prepend(dayoneDiv)
+
+                    console.log(daily[i].temp.day)
 
                 }
             
@@ -76,13 +87,6 @@ $(document).ready(function () {
 
 
     };
-
-
-
-
-
-
-
 
 
 
